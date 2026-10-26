@@ -1,0 +1,11 @@
+{
+  "api_version": "edbg.connection/v0",
+  "id": "sample-sensor-bus",
+  "name": "Sensor bus (declared)",
+  "node_id": "REPLACE_WITH_REGISTERED_NODE_ID",
+  "target": {"id": "sample-sensor", "revision": 1},
+  "interface": {"id": "i2c0", "kind": "i2c"},
+  "adapter_id": "esp32s3-gpio-v1",
+  "physical_bus_id": "sample-physical-bus",
+  "enabled": true
+}

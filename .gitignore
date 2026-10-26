@@ -1,0 +1,27 @@
+simple_ota/config.h
+simple_ota/demo_version.h
+tools/*.local.json
+build/
+artifacts/
+backup/
+__pycache__/
+.venv/
+.local/
+*.egg-info/
+**/dist/
+
+# Private configuration, credentials and local runtime data.
+*.local.*
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+*.db
+*.pyc
+.pytest_cache/

@@ -1,0 +1,105 @@
+{
+  "$defs": {
+    "RunningImage": {
+      "additionalProperties": false,
+      "properties": {
+        "algorithm": {
+          "const": "sha256-file-v1",
+          "title": "Algorithm",
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Sha256",
+          "type": "string"
+        },
+        "size": {
+          "maximum": 3145728,
+          "minimum": 256,
+          "title": "Size",
+          "type": "integer"
+        },
+        "project": {
+          "maxLength": 32,
+          "minLength": 1,
+          "title": "Project",
+          "type": "string"
+        }
+      },
+      "required": [
+        "algorithm",
+        "sha256",
+        "size",
+        "project"
+      ],
+      "title": "RunningImage",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "protocol": {
+      "const": "edbg.agent/v1",
+      "title": "Protocol",
+      "type": "string"
+    },
+    "family": {
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,31}$",
+      "title": "Family",
+      "type": "string"
+    },
+    "build": {
+      "maxLength": 31,
+      "minLength": 1,
+      "title": "Build",
+      "type": "string"
+    },
+    "uptime_ms": {
+      "maximum": 9007199254740991,
+      "minimum": 0,
+      "title": "Uptime Ms",
+      "type": "integer"
+    },
+    "health": {
+      "enum": [
+        "pending",
+        "valid",
+        "error"
+      ],
+      "title": "Health",
+      "type": "string"
+    },
+    "image": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/RunningImage"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "features": {
+      "items": {
+        "pattern": "^[a-z][a-z0-9._-]{0,47}/[1-9][0-9]{0,3}$",
+        "type": "string"
+      },
+      "maxItems": 32,
+      "title": "Features",
+      "type": "array"
+    }
+  },
+  "required": [
+    "protocol",
+    "family",
+    "build",
+    "uptime_ms",
+    "health",
+    "image",
+    "features"
+  ],
+  "title": "AgentRuntime",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:edbg:agent:runtime:1"
+}

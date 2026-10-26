@@ -1,0 +1,20 @@
+{
+  "api_version": "edbg.operation.draft/0",
+  "connection": {
+    "id": "node-maintenance",
+    "revision": 1
+  },
+  "action": "node.update",
+  "params": {
+    "image": {
+      "artifact_id": "agent-example",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "confirmation": "image_identity"
+  },
+  "idempotency_key": "example-intent-node-update",
+  "timing": {
+    "dispatch_within_ms": 5000,
+    "execution_timeout_ms": 300000
+  }
+}

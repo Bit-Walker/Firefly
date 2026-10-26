@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:edbg:compat:uart-operation-result:0",
+  "title": "Compatibility operation result; SDK wait metadata is separate",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "const": "edbg.operation/v0"
+    },
+    "id": {
+      "type": "string"
+    },
+    "action": {
+      "enum": [
+        "uart.session.open",
+        "uart.write",
+        "uart.session.close",
+        "uart.session.renew",
+        "i2c.transfer",
+        "node.update"
+      ]
+    },
+    "state": {
+      "enum": [
+        "accepted",
+        "dispatched",
+        "releasing",
+        "finished"
+      ]
+    },
+    "outcome": {
+      "enum": [
+        null,
+        "succeeded",
+        "failed",
+        "cancelled",
+        "expired",
+        "unknown"
+      ]
+    },
+    "resource_status": {
+      "enum": [
+        "held",
+        "released",
+        "unconfirmed",
+        "release_pending"
+      ]
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "created": {
+      "type": "number"
+    },
+    "updated": {
+      "type": "number"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "session_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "request_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "dispatch_before": {
+      "type": "number"
+    },
+    "execution_deadline": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "normalization": {
+      "enum": [
+        "strict-json-uart/1",
+        "strict-json-i2c/1",
+        "strict-json-update/1"
+      ]
+    },
+    "cancel_requested": {
+      "type": "boolean"
+    },
+    "compatibility": {
+      "type": "object",
+      "properties": {
+        "level": {
+          "enum": [
+            "legacy_uart_once",
+            "legacy_i2c_once",
+            "agent_image_identity"
+          ]
+        },
+        "write_delivery": {
+          "const": "single_publication_no_retry"
+        },
+        "timeout_semantics": {
+          "const": "server_confirmation_window"
+        },
+        "node_execution_budget_enforced": {
+          "const": false
+        },
+        "node_local_lease_ms_max": {
+          "enum": [
+            10000,
+            null
+          ]
+        }
+      },
+      "required": [
+        "level",
+        "write_delivery",
+        "timeout_semantics",
+        "node_execution_budget_enforced",
+        "node_local_lease_ms_max"
+      ],
+      "additionalProperties": false
+    },
+    "binding": {
+      "type": "object"
+    },
+    "resources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "result": {
+      "type": "object"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "required": [
+    "api_version",
+    "id",
+    "action",
+    "state",
+    "outcome",
+    "resource_status",
+    "revision",
+    "created",
+    "updated",
+    "node_id",
+    "session_id",
+    "request_digest",
+    "dispatch_before",
+    "execution_deadline",
+    "normalization",
+    "cancel_requested",
+    "compatibility",
+    "binding",
+    "resources",
+    "result",
+    "evidence"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "const": "finished"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outcome": {
+            "type": "string"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "outcome": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "node.update"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "session_id": {
+            "type": "null"
+          },
+          "normalization": {
+            "const": "strict-json-update/1"
+          },
+          "compatibility": {
+            "properties": {
+              "level": {
+                "const": "agent_image_identity"
+              },
+              "node_local_lease_ms_max": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "compatibility": {
+            "properties": {
+              "node_local_lease_ms_max": {
+                "const": 10000
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

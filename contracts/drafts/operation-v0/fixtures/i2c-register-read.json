@@ -1,0 +1,25 @@
+{
+  "api_version": "edbg.operation.draft/0",
+  "connection": {
+    "id": "sensor-bus",
+    "revision": 1
+  },
+  "action": "i2c.transfer",
+  "params": {
+    "address": 118,
+    "speed_hz": 10000,
+    "messages": [
+      {
+        "write_hex": "d0"
+      },
+      {
+        "read_length": 1
+      }
+    ]
+  },
+  "idempotency_key": "example-intent-i2c-register-read",
+  "timing": {
+    "dispatch_within_ms": 5000,
+    "execution_timeout_ms": 10000
+  }
+}

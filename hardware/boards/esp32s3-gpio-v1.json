@@ -1,0 +1,54 @@
+{
+  "id": "esp32s3-gpio-v1",
+  "name": "ESP32-S3 GPIO",
+  "voltage": "3.3 V",
+  "session_seconds": 300,
+  "uart": {
+    "baud": 115200,
+    "format": "8N1",
+    "tx": 4,
+    "rx": 5,
+    "monitor_rx": 8,
+    "monitor_role": "probe",
+    "monitor_source_role": "target",
+    "monitor_source_tx": 43
+  },
+  "wave": {
+    "channels": 1,
+    "resolution_us": 1,
+    "directions": [
+      {
+        "value": "ab",
+        "source_role": "target",
+        "receiver_role": "probe",
+        "gpio": 6
+      },
+      {
+        "value": "ba",
+        "source_role": "probe",
+        "receiver_role": "target",
+        "gpio": 7
+      }
+    ]
+  },
+  "i2c": {
+    "mode": "paired_responder",
+    "modes": [
+      "external",
+      "paired"
+    ],
+    "master_roles": [
+      "target",
+      "probe"
+    ],
+    "master_role": "probe",
+    "responder_role": "target",
+    "master_capability": "i2c_master_v2",
+    "sda": 9,
+    "scl": 10,
+    "speed_hz": 10000,
+    "responder_address": 66,
+    "max_bytes": 64,
+    "pullup": "internal"
+  }
+}

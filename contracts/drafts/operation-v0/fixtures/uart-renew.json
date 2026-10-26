@@ -1,0 +1,18 @@
+{
+  "api_version": "edbg.operation.draft/0",
+  "connection": {
+    "id": "console-uart",
+    "revision": 1
+  },
+  "action": "uart.session.renew",
+  "params": {
+    "session_id": "session-example",
+    "expected_lease_revision": 1,
+    "lease_duration_ms": 60000
+  },
+  "idempotency_key": "example-intent-uart-renew",
+  "timing": {
+    "dispatch_within_ms": 5000,
+    "execution_timeout_ms": 10000
+  }
+}

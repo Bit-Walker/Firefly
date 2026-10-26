@@ -1,0 +1,21 @@
+{
+  "api_version": "edbg.operation.draft/0",
+  "connection": {
+    "id": "console-uart",
+    "revision": 1
+  },
+  "action": "uart.session.open",
+  "params": {
+    "baud_rate": 115200,
+    "data_bits": 8,
+    "parity": "none",
+    "stop_bits": "1",
+    "flow_control": "none",
+    "lease_duration_ms": 30000
+  },
+  "idempotency_key": "example-intent-uart-open",
+  "timing": {
+    "dispatch_within_ms": 5000,
+    "execution_timeout_ms": 30000
+  }
+}

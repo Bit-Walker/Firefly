@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:edbg:cli-query:v0",
+  "title": "CLI query result compatibility envelope",
+  "type": "object",
+  "properties": {
+    "schema": {"const": "edbg.cli.query/v0"},
+    "ok": {"type": "boolean"},
+    "data": {},
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {"type": "string"},
+        "message": {"type": "string"},
+        "context": {"type": "object"},
+        "http_status": {"type": "integer", "minimum": 100, "maximum": 599}
+      },
+      "required": ["code", "message"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["schema", "ok"],
+  "oneOf": [
+    {"properties": {"ok": {"const": true}}, "required": ["data"], "not": {"required": ["error"]}},
+    {"properties": {"ok": {"const": false}}, "required": ["error"], "not": {"required": ["data"]}}
+  ],
+  "additionalProperties": false
+}

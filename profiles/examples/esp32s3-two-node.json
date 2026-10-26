@@ -1,0 +1,15 @@
+{
+  "status": "compatibility-example",
+  "adapter_id": "esp32s3-gpio-v1",
+  "members": [
+    {
+      "device_id": "REPLACE_WITH_REGISTERED_NODE_ID",
+      "role": "target"
+    },
+    {
+      "device_id": "REPLACE_WITH_OTHER_NODE_ID",
+      "role": "probe"
+    }
+  ],
+  "note": "Example only. Runtime membership is still managed by the compatibility service; this file is not automatically loaded."
+}

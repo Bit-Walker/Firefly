@@ -1,0 +1,6 @@
+# Workspace inventory. Install the packages with tools/bootstrap.ps1.
+[tool.edbg.workspace]
+packages = ["packages/analysis", "packages/sdk-python", "apps/control-plane", "apps/cli"]
+web = "apps/web"
+hardware = "hardware"
+compatibility = "fleet"

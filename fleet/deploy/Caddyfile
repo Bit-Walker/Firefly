@@ -1,0 +1,9 @@
+{
+    email {$ACME_EMAIL}
+}
+{$FLEET_DOMAIN} {
+    request_body {
+        max_size 4MB
+    }
+    reverse_proxy api:8000
+}

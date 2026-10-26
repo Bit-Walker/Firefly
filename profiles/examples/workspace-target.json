@@ -1,0 +1,6 @@
+{
+  "api_version": "edbg.target/v0",
+  "id": "sample-sensor",
+  "name": "Sensor target (declared)",
+  "kind": "external"
+}

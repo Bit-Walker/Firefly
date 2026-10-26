@@ -1,0 +1,418 @@
+{
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "const": "edbg.operation.draft/0"
+    },
+    "connection": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "id",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "uart.session.open",
+        "uart.write",
+        "uart.session.close",
+        "i2c.transfer",
+        "target.flash",
+        "node.update",
+        "uart.session.renew"
+      ]
+    },
+    "params": {
+      "type": "object"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{15,127}$"
+    },
+    "timing": {
+      "type": "object",
+      "properties": {
+        "dispatch_within_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        },
+        "execution_timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3600000
+        }
+      },
+      "required": [
+        "dispatch_within_ms",
+        "execution_timeout_ms"
+      ],
+      "additionalProperties": false
+    },
+    "preconditions": {
+      "type": "object",
+      "properties": {
+        "node_boot_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+        }
+      },
+      "required": [
+        "node_boot_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "api_version",
+    "connection",
+    "action",
+    "params",
+    "idempotency_key",
+    "timing"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:edbg:draft:operation-request:0",
+  "title": "Experimental operation request, not a live endpoint",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "uart.session.open"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "baud_rate": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "data_bits": {
+                "type": "integer",
+                "minimum": 5,
+                "maximum": 9
+              },
+              "parity": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "even",
+                  "odd",
+                  "mark",
+                  "space"
+                ]
+              },
+              "stop_bits": {
+                "type": "string",
+                "enum": [
+                  "1",
+                  "1.5",
+                  "2"
+                ]
+              },
+              "flow_control": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "rts_cts"
+                ]
+              },
+              "lease_duration_ms": {
+                "type": "integer",
+                "minimum": 100,
+                "maximum": 600000
+              }
+            },
+            "required": [
+              "baud_rate",
+              "data_bits",
+              "parity",
+              "stop_bits",
+              "flow_control",
+              "lease_duration_ms"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "uart.write"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+              },
+              "data_hex": {
+                "type": "string",
+                "pattern": "^(?:[0-9a-fA-F]{2})+$",
+                "maxLength": 131072
+              }
+            },
+            "required": [
+              "session_id",
+              "data_hex"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "uart.session.close"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+              }
+            },
+            "required": [
+              "session_id"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "i2c.transfer"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "address": {
+                "type": "integer",
+                "minimum": 8,
+                "maximum": 119
+              },
+              "speed_hz": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "messages": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 16,
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "write_hex": {
+                          "type": "string",
+                          "pattern": "^(?:[0-9a-fA-F]{2})+$",
+                          "maxLength": 8192
+                        }
+                      },
+                      "required": [
+                        "write_hex"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "read_length": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "maximum": 4096
+                        }
+                      },
+                      "required": [
+                        "read_length"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            },
+            "required": [
+              "address",
+              "speed_hz",
+              "messages"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "target.flash"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "image": {
+                "type": "object",
+                "properties": {
+                  "artifact_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "artifact_id",
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "verification": {
+                "type": "string",
+                "enum": [
+                  "provider_verify",
+                  "readback_sha256"
+                ]
+              }
+            },
+            "required": [
+              "image",
+              "verification"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "node.update"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "image": {
+                "type": "object",
+                "properties": {
+                  "artifact_id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                },
+                "required": [
+                  "artifact_id",
+                  "sha256"
+                ],
+                "additionalProperties": false
+              },
+              "confirmation": {
+                "type": "string",
+                "enum": [
+                  "image_identity"
+                ]
+              }
+            },
+            "required": [
+              "image",
+              "confirmation"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "uart.session.renew"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "params": {
+            "type": "object",
+            "properties": {
+              "session_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+              },
+              "expected_lease_revision": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "lease_duration_ms": {
+                "type": "integer",
+                "minimum": 100,
+                "maximum": 300000
+              }
+            },
+            "required": [
+              "session_id",
+              "expected_lease_revision",
+              "lease_duration_ms"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ]
+}

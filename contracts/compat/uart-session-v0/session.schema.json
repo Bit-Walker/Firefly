@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:edbg:compat:uart-session:0",
+  "title": "Managed UART controller session snapshot",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "const": "edbg.session/v0"
+    },
+    "kind": {
+      "const": "uart"
+    },
+    "id": {
+      "type": "string"
+    },
+    "node_id": {
+      "type": "string"
+    },
+    "boot_id": {
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "opening",
+        "active",
+        "closing",
+        "expired",
+        "closed",
+        "lost"
+      ]
+    },
+    "created": {
+      "type": "number"
+    },
+    "binding": {
+      "type": "object"
+    },
+    "stream_id": {
+      "type": "string"
+    },
+    "lease": {
+      "type": "object",
+      "properties": {
+        "revision": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expires_at": {
+          "type": "number"
+        },
+        "remaining_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "expired": {
+          "type": "boolean"
+        },
+        "scope": {
+          "const": "server_policy"
+        },
+        "node_revision_acknowledged": {
+          "const": false
+        }
+      },
+      "required": [
+        "revision",
+        "expires_at",
+        "remaining_ms",
+        "expired",
+        "scope",
+        "node_revision_acknowledged"
+      ],
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "properties": {
+        "current_boot_id": {
+          "type": "string"
+        },
+        "last_seen": {
+          "type": "number"
+        },
+        "control_heartbeat_fresh": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "current_boot_id",
+        "last_seen",
+        "control_heartbeat_fresh"
+      ],
+      "additionalProperties": false
+    },
+    "last_context_snapshot": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "api_version",
+    "kind",
+    "id",
+    "node_id",
+    "boot_id",
+    "state",
+    "created",
+    "binding",
+    "stream_id",
+    "lease",
+    "node",
+    "last_context_snapshot"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:edbg:compat:artifact:0",
+  "title": "Registered legacy node firmware manifest; metadata does not attest running bytes",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "const": "edbg.artifact/v0"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{24}$"
+    },
+    "kind": {
+      "const": "node_firmware"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 256,
+      "maximum": 3145728
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 31
+    },
+    "created": {
+      "type": "number"
+    },
+    "format": {
+      "const": "esp_app"
+    },
+    "chip": {
+      "const": "esp32s3"
+    },
+    "project": {
+      "const": "fleet_agent"
+    },
+    "withdrawn": {
+      "type": "boolean"
+    },
+    "withdrawal_reason": {
+      "type": "string"
+    },
+    "validation": {
+      "const": "esp_image_segments_checksum_sha256"
+    },
+    "signature_verified": {
+      "const": false
+    }
+  },
+  "required": [
+    "api_version",
+    "id",
+    "kind",
+    "sha256",
+    "size",
+    "version",
+    "created",
+    "format",
+    "chip",
+    "project",
+    "withdrawn",
+    "withdrawal_reason",
+    "validation",
+    "signature_verified"
+  ],
+  "additionalProperties": false
+}

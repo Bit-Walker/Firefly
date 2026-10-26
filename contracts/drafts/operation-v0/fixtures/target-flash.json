@@ -1,0 +1,20 @@
+{
+  "api_version": "edbg.operation.draft/0",
+  "connection": {
+    "id": "target-programmer",
+    "revision": 1
+  },
+  "action": "target.flash",
+  "params": {
+    "image": {
+      "artifact_id": "image-example",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "verification": "readback_sha256"
+  },
+  "idempotency_key": "example-intent-target-flash",
+  "timing": {
+    "dispatch_within_ms": 5000,
+    "execution_timeout_ms": 300000
+  }
+}

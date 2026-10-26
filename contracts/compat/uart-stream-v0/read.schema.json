@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:edbg:compat:uart-stream-read:0",
+  "title": "Bounded UART receive log page",
+  "type": "object",
+  "properties": {
+    "api_version": {
+      "const": "edbg.stream.read/v0"
+    },
+    "stream": {
+      "type": "object",
+      "properties": {
+        "api_version": {
+          "const": "edbg.stream/v0"
+        },
+        "id": {
+          "type": "string"
+        },
+        "session_id": {
+          "type": "string"
+        },
+        "boot_id": {
+          "type": "string"
+        },
+        "source_checkpoint": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "source_ended": {
+          "type": "boolean"
+        },
+        "tail_complete": {
+          "const": false
+        },
+        "retention": {
+          "type": "object",
+          "required": [
+            "trimmed_through",
+            "earliest_after",
+            "latest_after",
+            "records",
+            "payload_bytes"
+          ]
+        }
+      },
+      "required": [
+        "api_version",
+        "id",
+        "session_id",
+        "boot_id",
+        "source_checkpoint",
+        "source_ended",
+        "tail_complete",
+        "retention",
+        "limits"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "maxItems": 200,
+      "items": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "kind": {
+            "enum": [
+              "rx",
+              "source_gap",
+              "source_discarded",
+              "source_counters",
+              "history_unavailable",
+              "source_ended"
+            ]
+          }
+        },
+        "required": [
+          "offset",
+          "kind"
+        ],
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "rx"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "data_hex": {
+                  "type": "string",
+                  "pattern": "^(?:[0-9a-f]{2})+$",
+                  "maxLength": 256
+                },
+                "source_seq": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "source_time_us": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "port": {
+                  "enum": [
+                    1,
+                    2
+                  ]
+                }
+              },
+              "required": [
+                "data_hex",
+                "source_seq",
+                "source_time_us",
+                "port"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "source_ended"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "tail_complete": {
+                  "const": false
+                }
+              },
+              "required": [
+                "tail_complete"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "next_after": {
+      "type": "string",
+      "pattern": "^c1\\."
+    },
+    "payload_bytes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 65536
+    },
+    "scanned_records": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 200
+    },
+    "has_more": {
+      "type": "boolean"
+    },
+    "eof": {
+      "type": "boolean"
+    },
+    "history_truncated": {
+      "type": "boolean"
+    },
+    "port": {
+      "enum": [
+        null,
+        1,
+        2
+      ]
+    }
+  },
+  "required": [
+    "api_version",
+    "stream",
+    "items",
+    "next_after",
+    "payload_bytes",
+    "scanned_records",
+    "has_more",
+    "eof",
+    "history_truncated",
+    "port"
+  ],
+  "additionalProperties": false
+}

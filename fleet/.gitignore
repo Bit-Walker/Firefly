@@ -1,0 +1,10 @@
+.state/
+artifacts/
+firmware/build/
+firmware/sdkconfig
+firmware/sdkconfig.old
+__pycache__/
+*.local.json
+*.local.csv
+*.local.bin
+deploy/.env

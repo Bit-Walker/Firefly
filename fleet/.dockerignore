@@ -1,0 +1,7 @@
+.state
+artifacts
+firmware
+tests
+__pycache__
+deploy/.env
+*.local.*

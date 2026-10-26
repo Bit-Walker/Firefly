@@ -1,0 +1,16 @@
+{
+  "api_version": "edbg.operation.draft/0",
+  "connection": {
+    "id": "console-uart",
+    "revision": 1
+  },
+  "action": "uart.session.close",
+  "params": {
+    "session_id": "session-example"
+  },
+  "idempotency_key": "example-intent-uart-close",
+  "timing": {
+    "dispatch_within_ms": 5000,
+    "execution_timeout_ms": 30000
+  }
+}
